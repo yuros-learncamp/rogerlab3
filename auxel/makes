@@ -1,0 +1,9 @@
+#!/bin/bash
+
+function raptor_kernel_make() {
+    echo "raptor kernel make"
+}
+
+function raptor_kernel_post() {
+    echo "raptor kernel post"
+}
