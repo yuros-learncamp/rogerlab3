@@ -2,7 +2,7 @@
 
 ## preparation
 ```
-pacman -Syu git &&
+pacman -Syu git 
 ```
 
 ## operation
