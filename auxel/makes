@@ -62,7 +62,7 @@ function raptor_disks_prep_efis() {
 
 ## BOOT PARTITION
 function raptor_disks_prep_boot_form() {
-    echo "format boot path : $procpath"
+    echo "format boot path : $bootpath"
     if [[ ! -z $( lsblk -o path | grep $bootpath ) ]];then
         echo "format boot partition"
         mkfs.ext4 -S 4096 -L BOOT $bootpath  
@@ -70,10 +70,11 @@ function raptor_disks_prep_boot_form() {
 }
 
 function raptor_disks_prep_boot_make() {
-    echo "make boot path : $procpath"
+    echo "make boot path : $bootpath"
     if [[ -z  $( lsblk -o path | grep $bootpath )  ]];then
         echo "create boot partition"
-        parted -s $drivpath mkpart primary ext4 0% 1GiB
+        #parted -s $drivpath mkpart primary ext4 1024MiB 2056MiB
+        echo -e "n\np\n\n+1G\nw" | fdisk $drivpath
     fi
 }
 
@@ -114,7 +115,8 @@ function raptor_disks_prep_proc_make() {
     echo "make root path : $procpath"
     if [[ -z $( lsblk -o path | grep $procpath ) ]];then
         echo "create proc partition"
-        parted -s $drivpath mkpart logical ext4 0% 25GiB
+        #parted -s $drivpath mkpart logical ext4 0% 25GiB
+        echo -e "n\np\n\n+25G\nw" | fdisk $drivpath
     fi
 }
 
@@ -138,7 +140,8 @@ function raptor_disks_prep_swap_make() {
 
     if [[ -z $( lsblk -o path | grep $swappath ) ]];then
         echo "create swap partition"
-        parted -s $drivpath mkpart primary ext4 27056MiB 31168MiB
+        #parted -s $drivpath mkpart primary ext4 27056MiB 31168MiB
+        echo -e "n\np\n\n+4G\nw" | fdisk $drivpath
     fi
 }
 
@@ -176,6 +179,8 @@ function raptor_disks_prep_home_form() {
 
 function raptor_disks_prep_home() {
     echo "prep home partition"
+    raptor_disks_prep_home_make
+    raptor_disks_prep_home_form
 }
 
 function raptor_disks_prep() {
