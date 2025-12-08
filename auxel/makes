@@ -91,8 +91,8 @@ function raptor_disks_prep_proc_make() {
 function raptor_disks_prep_proc_form() {
 
     if [[ ! -z $( lsblk -o path | grep $procpath ) ]];then
-        echo "format boot partition"
-        mkfs.ext4 -S 4096 -L BOOT $bootpath  
+        echo "format proc partition"
+        mkfs.ext4 -S 4096 -L BOOT $procpath  
     fi
 }
 
