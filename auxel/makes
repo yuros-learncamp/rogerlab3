@@ -179,8 +179,8 @@ function raptor_disks_prep_home_form() {
 
 function raptor_disks_prep_home() {
     echo "prep home partition"
-    raptor_disks_prep_home_make
-    raptor_disks_prep_home_form
+    #raptor_disks_prep_home_make
+    #raptor_disks_prep_home_form
 }
 
 function raptor_disks_prep() {
