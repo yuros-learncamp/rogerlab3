@@ -75,8 +75,6 @@ function raptor_disks_prep_boot_dual() {
 
 function raptor_disks_prep_boot() {
 
-    raptor_disks_prep_boot_vali
-
     if [[ $dualboot == true ]];then
         raptor_disks_prep_boot_dual
     else
@@ -114,7 +112,7 @@ function raptor_disks_prep_proc_make() {
 
     if [[ -z $( lsblk -o path | grep $procpath ) ]];then
         echo "create proc partition"
-        parted -s $drivpath mkpart primary ext4 2056MiB 27056MiB
+        parted -s $drivpath mkpart logical ext4 2056MiB 27056MiB
     fi
 }
 
