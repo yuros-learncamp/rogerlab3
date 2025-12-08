@@ -22,6 +22,7 @@ function raptor_disks_prep_boot_vali() {
 }
 
 function raptor_disks_prep_boot_form() {
+    echo "format boot path : $procpath"
     if [[ ! -z $( lsblk -o path | grep $bootpath ) ]];then
         echo "format boot partition"
         mkfs.ext4 -S 4096 -L BOOT $bootpath  
@@ -29,6 +30,7 @@ function raptor_disks_prep_boot_form() {
 }
 
 function raptor_disks_prep_boot_make() {
+    echo "make boot path : $procpath"
     if [[ -z  $( lsblk -o path | grep $bootpath )  ]];then
         echo "create boot partition"
         parted -s $drivpath mkpart primary ext4 1MiB 2000MiB
@@ -82,14 +84,16 @@ function raptor_disks_prep_boot() {
 }
 
 function raptor_disks_prep_proc_make() {
-    if [[ -z $( lsblk -o path | grep $procpath )  ]];then
+    echo "make root path : $procpath"
+
+    if [[ -z $( lsblk -o path | grep $procpath ) ]];then
         echo "create proc partition"
         parted -s $drivpath mkpart primary ext4 2000MiB 27000MiB
     fi
 }
 
 function raptor_disks_prep_proc_form() {
-
+    echo "format root path : $procpath"
     if [[ ! -z $( lsblk -o path | grep $procpath ) ]];then
         echo "format proc partition"
         mkfs.ext4 -S 4096 -L BOOT $procpath  
