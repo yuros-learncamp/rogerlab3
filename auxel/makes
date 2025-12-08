@@ -82,7 +82,7 @@ function raptor_disks_prep_boot() {
 }
 
 function raptor_disks_prep_proc_make() {
-    if [[ -z  $(lsblk | grep $procpath )  ]];then
+    if [[ -z $( lsblk -o path | grep $procpath )  ]];then
         echo "create proc partition"
         parted -s $drivpath mkpart primary ext4 2001MiB 27000MiB
     fi
@@ -90,12 +90,9 @@ function raptor_disks_prep_proc_make() {
 
 function raptor_disks_prep_proc_form() {
 
-    if [[ ! -z $( lsblk | grep $procpath ) ]];then
+    if [[ ! -z $( lsblk -o path | grep $procpath ) ]];then
         echo "format boot partition"
         mkfs.ext4 -S 4096 -L BOOT $bootpath  
-    else
-        echo "boot partition not found"
-        exit 1
     fi
 }
 
