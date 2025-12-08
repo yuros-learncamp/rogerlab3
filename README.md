@@ -1,6 +1,6 @@
 # Raptor Operating System Devtest
 
-## preparation
+## preparing
 ```
 pacman -Syu git 
 ```
