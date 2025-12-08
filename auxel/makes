@@ -34,6 +34,32 @@ function raptor_disks_prep_swip() {
 }
 
 
+## EFI PARTITION
+function raptor_disks_prep_efis_make() {
+
+    echo "make efi path : $efispath"
+    if [[ -z  $( lsblk -o path | grep $efispath )  ]];then
+        echo "create efi partition"
+        parted -s --align=optimal "$drivpath" mkpart "EFI System Partition" fat32 1MiB 1024MiB
+        parted -s $drivpath set 1 esp on 
+        parted -s "$drivpath" set 1 boot on
+    fi
+}
+
+function raptor_disks_prep_efis_form() {
+
+    echo "format efi path : $efispath"
+    if [[ ! -z $( lsblk -o path | grep $efispath ) ]];then
+        echo "format boot partition"
+        mkfs.vfat -F32 $efispath  
+    fi
+}
+
+function raptor_disks_prep_efis() {
+    raptor_disks_prep_efis_make
+    raptor_disks_prep_efis_form
+}
+
 ## BOOT PARTITION
 function raptor_disks_prep_boot_form() {
     echo "format boot path : $procpath"
@@ -47,7 +73,7 @@ function raptor_disks_prep_boot_make() {
     echo "make boot path : $procpath"
     if [[ -z  $( lsblk -o path | grep $bootpath )  ]];then
         echo "create boot partition"
-        parted -s $drivpath mkpart primary ext4 1MiB 1544MiB
+        parted -s $drivpath mkpart primary ext4 1024MiB 2056MiB
     fi
 }
 
@@ -82,31 +108,6 @@ function raptor_disks_prep_boot() {
     fi
 }
 
-## EFI PARTITION
-function raptor_disks_prep_efis_make() {
-
-    echo "make efi path : $efispath"
-    if [[ -z  $( lsblk -o path | grep $efispath )  ]];then
-        echo "create efi partition"
-        parted -s --align=optimal "$drivpath" mkpart "EFI System Partition" fat32 1544MiB 2056MiB
-        parted -s $drivpath set 1 esp on 
-        parted -s "$drivpath" set 1 boot on
-    fi
-}
-
-function raptor_disks_prep_efis_form() {
-
-    echo "format efi path : $efispath"
-    if [[ ! -z $( lsblk -o path | grep $efispath ) ]];then
-        echo "format boot partition"
-        mkfs.vfat -F32 $efispath  
-    fi
-}
-
-function raptor_disks_prep_efis() {
-    raptor_disks_prep_efis_make
-    raptor_disks_prep_efis_form
-}
 
 ## PROC PARTITION
 function raptor_disks_prep_proc_make() {
@@ -122,7 +123,7 @@ function raptor_disks_prep_proc_form() {
     echo "format root path : $procpath"
     if [[ ! -z $( lsblk -o path | grep $procpath ) ]];then
         echo "format proc partition"
-        mkfs.ext4 -S 4096 -L BOOT $procpath  
+        mkfs.ext4 $procpath  
     fi
 }
 
@@ -184,8 +185,8 @@ function raptor_disks_prep() {
     echo "Partition installation"
     raptor_disks_prep_dual
     raptor_disks_prep_swip
-    raptor_disks_prep_boot
     raptor_disks_prep_efis
+    raptor_disks_prep_boot
     raptor_disks_prep_proc
     raptor_disks_prep_swap
     raptor_disks_prep_home
