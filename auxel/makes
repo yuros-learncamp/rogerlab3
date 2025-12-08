@@ -88,9 +88,9 @@ function raptor_disks_prep_efis_make() {
     echo "make efi path : $efispath"
     if [[ -z  $( lsblk -o path | grep $efispath )  ]];then
         echo "create efi partition"
-        parted -s --align=optimal "$efispath" mkpart "EFI System Partition" fat32 1544MiB 2056MiB
-        parted -s $efispath set 1 esp on 
-        parted -s "$efispath" set 1 boot on
+        parted -s --align=optimal "$drivpath" mkpart "EFI System Partition" fat32 1544MiB 2056MiB
+        parted -s $drivpath set 1 esp on 
+        parted -s "$drivpath" set 1 boot on
     fi
 }
 
