@@ -2,5 +2,5 @@
 
 
 ```
-git clone https://github.com/almuhdilkarim/testing.git
+git clone https://github.com/almuhdilkarim/testing.git /install
 ```
