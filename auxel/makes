@@ -336,11 +336,10 @@ function raptor_cores_post_user() {
     arch-chroot /mnt usermod -aG wheel $username &&
     
     echo "create user password"
-    export makepass=$username
-    export makeuser=$password
-    echo $password
-    
-    arch-chroot /mnt /bin/bash -c "echo $makeuser:$makepass | chpasswd"
+    echo "#!/bin/bash" > /mnt/createuser &&
+    echo "echo $makeuser:$makepass | chpasswd" >> /mnt/createuser &&
+    arch-chroot /mnt /bin/bash createuser &&
+    rm /mnt/createuser
     sleep 3
 }
 
