@@ -337,12 +337,12 @@ function raptor_kerns_post() {
 
 function raptor_boots_post_prep() {
 
-    if [[ -e /mnt/boot/*ucode* ]]; then
+    if [[ -f /mnt/boot/*ucode* ]]; then
         echo "clean microcode"
         mv /mnt/boot/*ucode* /boot/kernel/ 
     fi
 
-    if [[ -e /mnt/boot/vmlinuz* ]]; then
+    if [[ -f /mnt/boot/vmlinuz* ]]; then
         echo "clean vmlinuz"
         mv /mnt/boot/vmlinuz*  /boot/kernel/ 
     fi
@@ -361,8 +361,8 @@ function raptor_boots_post_init() {
 function raptor_boots_post() {
     sleep 2 && clear
     echo "Booting module configuration"
-    #raptor_boots_post_prep
-    #raptor_boots_post_init
+    raptor_boots_post_prep
+    raptor_boots_post_init
 }
 
 function raptor_audio_post_serve() {
