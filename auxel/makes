@@ -6,7 +6,10 @@ function raptor_disks_prep_pure_mont() {
 }
 
 function raptor_disks_prep_pure_swap() {
-    swapoff $(lsblk -o path,label | grep "SWAP" | awk '{print $1}')
+    swaplabel=$(lsblk -o path,label | grep "SWAP" | awk '{print $1}')
+    if [[ -n $swaplabel ]];then
+        swapoff $swaplabel
+    fi
 }
 
 function raptor_disks_prep_pure() {
