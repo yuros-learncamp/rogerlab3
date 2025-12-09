@@ -13,6 +13,7 @@ plasma-meta
 qt5-declarative
 sddm
 firewalld
+iptables-nft
 base
 base-devel
 linux-firmware
