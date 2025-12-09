@@ -3,7 +3,9 @@
 ## PREP PARTITION
 function raptor_disks_prep_pure_mont() {
     local ismounted=$( lsblk -o lsblk -o path,mountpoint | grep "/mnt" )
-    test -n $ismounted && umount -R /mnt > /dev/null 2>&1
+    if [[ ! -z $ ]];then
+        umount -R /mnt > /dev/null 2>&1
+    fi
 }
 
 function raptor_disks_prep_pure() {
