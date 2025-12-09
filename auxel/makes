@@ -51,66 +51,64 @@ function raptor_disks_prep_swip() {
 function raptor_disks_prep_make_uefi() {
 
     if [[ -n $( lsblk -o label | grep "UEFI" ) ]]; then
-        return
+        echo "create uefi"
+        echo -e "n\np\n\n\n+1G\nt\n\n1\nw" | fdisk "$drivpath" > /dev/null 2>&1
+        sleep 2
+        uefipath=$(lsblk -o path | tail -n 1)
+        sleep 1
     fi
 
-    echo "create uefi"
-    echo -e "n\np\n\n\n+1G\nt\n\n1\nw" | fdisk "$drivpath" > /dev/null 2>&1
-    sleep 2
-    uefipath=$(lsblk -o path | tail -n 1)
-    sleep 1
+   
 }
 
 function raptor_disks_prep_make_boot() {
 
     if [[ -n $( lsblk -o label | grep "BOOT" ) ]]; then
-        return
+        echo "create boot"
+        echo -e "n\np\n\n\n+1G\nw" | fdisk "$drivpath" > /dev/null 2>&1
+        sleep 2
+        bootpath=$(lsblk -o path | tail -n 1)
+        sleep 1
     fi
 
-    echo "create boot"
-    echo -e "n\np\n\n\n+1G\nw" | fdisk "$drivpath" > /dev/null 2>&1
-    sleep 2
-    bootpath=$(lsblk -o path | tail -n 1)
-    sleep 1
+   
 }
 
 function raptor_disks_prep_make_root() {
     
     if [[ -n $( lsblk -o label | grep "ROOT" ) ]]; then
-        return
+        echo "create root"
+        echo -e "n\np\n\n\n+27G\nw" | fdisk "$drivpath" > /dev/null 2>&1
+        sleep 2
+        rootpath=$(lsblk -o path | tail -n 1)
+        sleep 1
     fi
 
-    echo "create root"
-    echo -e "n\np\n\n\n+27G\nw" | fdisk "$drivpath" > /dev/null 2>&1
-    sleep 2
-    rootpath=$(lsblk -o path | tail -n 1)
-    sleep 1
+    
 }
 
 function raptor_disks_prep_make_swap() {
     
     if [[ -n $( lsblk -o label | grep "SWAP" ) ]]; then
-        return
+        echo "create swap"
+        echo -e "n\np\n\n\n+4G\nw" | fdisk "$drivpath" > /dev/null 2>&1
+        sleep 2
+        swappath=$(lsblk -o path | tail -n 1)
+        sleep 1
     fi
 
-    echo "create swap"
-    echo -e "n\np\n\n\n+4G\nw" | fdisk "$drivpath" > /dev/null 2>&1
-    sleep 2
-    swappath=$(lsblk -o path | tail -n 1)
-    sleep 1
+    
 }
 
 function raptor_disks_prep_make_home() {
     
     if [[ -n $( lsblk -o label | grep "HOME" ) ]]; then
-        return
+        echo "create home"
+        echo -e "n\np\n\n\n\nw"    | fdisk "$drivpath" > /dev/null 2>&1
+        sleep 2
+        homepath=$(lsblk -o path | tail -n 1)
+        sleep 1
     fi
-
-    echo "create home"
-    echo -e "n\np\n\n\n\nw"    | fdisk "$drivpath" > /dev/null 2>&1
-    sleep 2
-    homepath=$(lsblk -o path | tail -n 1)
-    sleep 1
 }
 
 function raptor_disks_prep_make() {
