@@ -328,10 +328,13 @@ function raptor_cores_post_time() {
 }
 
 function raptor_cores_post_user() {
+
     echo "create administratif user"
     arch-chroot /mnt useradd -m $username &&
+
     echo "grant administrator role"
     arch-chroot /mnt usermod -aG wheel $username &&
+    
     echo "create user password"
     export makepass=$username
     export makeuser=$password
