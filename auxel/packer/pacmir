@@ -11,6 +11,7 @@ alsa-firmware
 pipewire-pulse
 pipewire-jack
 plasma-meta
+konsole
 qt5-declarative
 sddm
 firewalld
