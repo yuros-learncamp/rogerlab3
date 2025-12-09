@@ -187,12 +187,12 @@ function raptor_disks_prep() {
 
     sleep 2 && clear
     echo "Partition installation"
-    raptor_disks_prep_dual
-    raptor_disks_prep_swip
-    raptor_disks_prep_efis
-    raptor_disks_prep_boot
-    raptor_disks_prep_proc
-    raptor_disks_prep_swap
+    raptor_disks_prep_dual &&
+    raptor_disks_prep_swip &&
+    raptor_disks_prep_efis &&
+    raptor_disks_prep_boot && 
+    raptor_disks_prep_proc &&
+    raptor_disks_prep_swap &&
     raptor_disks_prep_home
     exit
 }
