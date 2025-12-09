@@ -274,22 +274,9 @@ function raptor_boots_prep() {
     echo "Booting module installation"
 }
 
-function raptor_neter_prep_conf() {
-    if [[ ! -e "/mnt/etc/systemd/network/"* ]];then
-        echo "prepare systemd network configuration"
-        cp "/etc/systemd/network/"* "/mnt/etc/systemd/network/"
-    fi
-    if [[ ! -d "/mnt/var/lib/iwd/" ]];then
-        echo "prepare wireless network configuration"
-        mkdir -p /mnt/var/lib/iwd/ &&
-        cp -f "/var/lib/iwd/"*.psk "/mnt/var/lib/iwd/"
-    fi
-}
-
 function raptor_neter_prep() {
     sleep 2 && clear
     echo "Network module installation"
-    raptor_neter_prep_conf
 }
 
 function raptor_audio_prep() {
@@ -339,6 +326,12 @@ function raptor_cores_post_time() {
     arch-chroot /mnt hwclock --systohc
     arch-chroot /mnt timedatectl set-ntp true
     arch-chroot /mnt timedatectl set-timezone $timezone 
+}
+
+function raptor_cores_post_user() {
+    arch-chroot /mnt useradd -m $username &&
+    arch-chroot /mnt usermod -aG wheel $username &&
+    arch-chroot /mnt echo "$username:$password" | chpasswd
 }
 
 function raptor_cores_post() {
@@ -441,16 +434,14 @@ function raptor_mitig_post() {
 
 function raptor_neter_post_serve() {
     arch-chroot /mnt systemctl enable sshd
-    arch-chroot /mnt systemctl enable systemd-networkd.socket
-    arch-chroot /mnt systemctl enable systemd-resolved
+    arch-chroot /mnt systemctl enable NetworkManager
+    arch-chroot /mnt systemctl enable dnsmasq
 }
 
 function raptor_neter_post() {
-
     sleep 2 && clear
     echo "Network module configuration"
     raptor_neter_post_serve
-    echo "Network module configured"
 }
 
 function raptor_secur_post_serve() {

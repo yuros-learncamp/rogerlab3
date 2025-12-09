@@ -1,8 +1,9 @@
 linux-zen
 mkinitcpio
 sbctl
-openssh
-pipewire
+networkmanager
+dnsmasq
+opensshpipewire
 wireplumber
 pipewire-audio
 sof-firmware
