@@ -51,7 +51,7 @@ function raptor_disks_prep_make() {
         echo "create boot"
         #sector_boot=$( parted -s "$drivpath" unit s print free | grep "Free Space" | head -n 2 | sed -n '2p' | awk '{print $1}' )
         #parted -s $drivpath mkpart primary ext4 $sector_boot "+2GB"
-        echo -e "n\np\n\n\n+3G\nw" | fdisk "$drivpath"
+        echo -e "n\np\n\n\n+1G\nw" | fdisk "$drivpath"
         sleep 2
 
         echo "create root"
