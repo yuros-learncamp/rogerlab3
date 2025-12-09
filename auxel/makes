@@ -90,20 +90,19 @@ function raptor_disks_prep_make() {
 
 
 ## FORM PARTITION
-
 function raptor_disks_prep_form_uefi() {
     echo "format uefi partition"
-    mkfs.vfat -F32 $uefipath
+    mkfs.vfat -F32 -S 4096 -n "UEFI" "$uefipath"
 }
 
 function raptor_disks_prep_form_boot() {
     echo "format boot partition"
-    mkfs.ext4 $bootpath
+    mkfs.ext4 -F -q -b 4096 -L "BOOT" "$bootpath"
 }
 
 function raptor_disks_prep_form_root() {
     echo "format root partition"
-    mkfs.ext4 $rootpath
+    mkfs.ext4 -F -q -b 4096 -L "ROOT" $rootpath
 }
 
 function raptor_disks_prep_form_swap() {
@@ -113,7 +112,7 @@ function raptor_disks_prep_form_swap() {
 
 function raptor_disks_prep_form_home() {
     echo "format home partition"
-    mkfs.ext4 $homepath
+    mkfs.ext4 -F -q -b 4096 -L "HOME" $homepath
 }
 
 function raptor_disks_prep_form() {
@@ -123,6 +122,7 @@ function raptor_disks_prep_form() {
     raptor_disks_prep_form_swap
     raptor_disks_prep_form_home
 }
+
 
 
 function raptor_disks_prep_efis_make() {
