@@ -258,16 +258,18 @@ function raptor_cores_prep() {
     craine_cores_post_config
 }
 
-function raptor_kerns_prep_pure() {
-    rm -f /mnt/etc/mkinitcpio.conf &&
-    rm -fr /mnt/etc/mkinitcpio.conf.d 
+function raptor_kerns_prep_install() {
+    arch-chroot /mnt "curl -s 'https://liquorix.net/install-liquorix.sh' | sudo bash"
 }
 
 function raptor_kerns_prep() {
+    
     sleep 2 && clear
     echo "Kernel module installation"
-    raptor_kerns_prep_pure
+
+    # raptor_kerns_prep_install
 }
+
 
 function raptor_boots_prep() {
     sleep 2 && clear
