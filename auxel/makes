@@ -34,6 +34,23 @@ function raptor_disks_prep_swip() {
 }
 
 
+## MAKE PARTITION
+function raptor_disks_prep_make() {
+    echo "make efi path : $efispath"
+    if [[ -z  $( lsblk -o path | grep $efispath )  ]];then
+        echo "create efi partition"
+        parted -s --align=optimal "$drivpath" mkpart primary fat32 1MiB 1GB
+        parted -s $drivpath set 1 esp on 
+        parted -s $drivpath set 1 boot on
+        parted -s $drivpath mkpart primary ext4 1GB 2GB
+        parted -s $drivpath mkpart logical ext4 2GB 27GB
+        parted -s $drivpath mkpart primary swap 27G 31GB
+        parted -s $drivpath mkpart primary swap 27G 31GB
+        parted -s $drivpath mkpart primary ext4 31GB 100%
+    fi
+}
+
+
 ## EFI PARTITION
 function raptor_disks_prep_efis_make() {
 
@@ -56,7 +73,7 @@ function raptor_disks_prep_efis_form() {
 }
 
 function raptor_disks_prep_efis() {
-    raptor_disks_prep_efis_make
+    #raptor_disks_prep_efis_make
     raptor_disks_prep_efis_form
 }
 
@@ -74,13 +91,12 @@ function raptor_disks_prep_boot_make() {
     if [[ -z  $( lsblk -o path | grep $bootpath )  ]];then
         echo "create boot partition"
         parted -s $drivpath mkpart primary ext4 1GB 2GB
-        
     fi
 }
 
 function raptor_disks_prep_boot_mono() {
     echo "set boot for linux only partition"
-    raptor_disks_prep_boot_make
+    #raptor_disks_prep_boot_make
     raptor_disks_prep_boot_form
 }
 
@@ -129,7 +145,7 @@ function raptor_disks_prep_proc_form() {
 
 function raptor_disks_prep_proc() {
     echo "prep proc partition"
-    raptor_disks_prep_proc_make
+    #raptor_disks_prep_proc_make
     raptor_disks_prep_proc_form
 }
 
@@ -153,8 +169,8 @@ function raptor_disks_prep_swap_form() {
 
 function raptor_disks_prep_swap() {
     echo "prep swap partition"
-    raptor_disks_prep_proc_make
-    raptor_disks_prep_proc_form
+    #raptor_disks_prep_swap_make
+    raptor_disks_prep_swap_form
 }
 
 ## HOME PARTITION
@@ -178,7 +194,7 @@ function raptor_disks_prep_home_form() {
 function raptor_disks_prep_home() {
     echo "prep home partition"
     #raptor_disks_prep_home_make
-    #raptor_disks_prep_home_form
+    raptor_disks_prep_home_form
 }
 
 function raptor_disks_prep() {
@@ -187,6 +203,7 @@ function raptor_disks_prep() {
     echo "Partition installation"
     raptor_disks_prep_dual &&
     raptor_disks_prep_swip &&
+    raptor_disks_prep_make &&
     raptor_disks_prep_efis &&
     raptor_disks_prep_boot && 
     raptor_disks_prep_proc &&
