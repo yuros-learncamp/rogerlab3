@@ -41,29 +41,29 @@ function raptor_disks_prep_make() {
         echo "create efi partition"
         
         echo "create efis"
-        sector_efis=$( parted -s "$drivpath" unit s print free | grep "Free Space" | head -n 2 | sed -n '2p' | awk '{print $1}'  )
+        sector_efis=$( parted -s "$drivpath" unit s print free | grep "Free Space" | awk '{print $1}' | tail -n 1 )
         parted -s --align=optimal "$drivpath" mkpart primary fat32 $sector_efis 1GB
         parted -s $drivpath set 1 esp on 
         parted -s $drivpath set 1 boot on
         sleep 2
 
         echo "create boot"
-        sector_boot=$( parted -s "$drivpath" unit s print free | grep "Free Space" | head -n 2 | sed -n '2p' | awk '{print $1}' )
+        sector_boot=$( parted -s "$drivpath" unit s print free | grep "Free Space" | awk '{print $1}' | tail -n 1 )
         parted -s $drivpath mkpart primary ext4 $sector_boot 2GB
         sleep 2
 
         echo "create root"
-        sector_root=$( parted -s "$drivpath" unit s print free | grep "Free Space" | head -n 2 | sed -n '2p' | awk '{print $1}'  )
+        sector_root=$( parted -s "$drivpath" unit s print free | grep "Free Space" | awk '{print $1}' | tail -n 1 )
         parted -s $drivpath mkpart primary ext4 $sector_root 27GB
         sleep 2
 
         echo "create swap"
-        sector_swap=$( parted -s "$drivpath" unit s print free | grep "Free Space" | head -n 2 | sed -n '2p' | awk '{print $1}'  )
+        sector_swap=$( parted -s "$drivpath" unit s print free | grep "Free Space" | awk '{print $1}' | tail -n 1 )
         parted -s $drivpath mkpart primary linux-swap $sector_swap 31GB
         sleep 2
 
         echo "create home"
-        sector_home=$( parted -s "$drivpath" unit s print free | grep "Free Space" | head -n 2 | sed -n '2p' | awk '{print $1}' )
+        sector_home=$( parted -s "$drivpath" unit s print free | grep "Free Space" | awk '{print $1}' | tail -n 1 )
         parted -s $drivpath mkpart primary ext4 $sector_home 100%
         sleep 2
     fi
