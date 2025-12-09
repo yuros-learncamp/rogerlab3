@@ -405,7 +405,7 @@ function raptor_neter_post() {
     sleep 2 && clear
     echo "Network module configuration"
     raptor_neter_post_serve
-    exit
+    echo "Network module configured"
 }
 
 function raptor_secur_post_serve() {
