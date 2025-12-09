@@ -40,7 +40,7 @@ function raptor_disks_prep_efis_make() {
     echo "make efi path : $efispath"
     if [[ -z  $( lsblk -o path | grep $efispath )  ]];then
         echo "create efi partition"
-        parted -s --align=optimal "$drivpath" mkpart "EFI System Partition" fat32 1MiB 1024MiB
+        parted -s --align=optimal "$drivpath" mkpart "EFI System Partition" fat32 1MiB 1GB
         parted -s $drivpath set 1 esp on 
         parted -s $drivpath set 1 boot on
     fi
@@ -73,8 +73,8 @@ function raptor_disks_prep_boot_make() {
     echo "make boot path : $bootpath"
     if [[ -z  $( lsblk -o path | grep $bootpath )  ]];then
         echo "create boot partition"
-        #parted -s $drivpath mkpart primary ext4 1024MiB 2056MiB
-        echo -e "n\np\n\n+1G\nw" | fdisk $drivpath
+        parted -s $drivpath mkpart primary ext4 1GB 2GB
+        
     fi
 }
 
@@ -115,8 +115,7 @@ function raptor_disks_prep_proc_make() {
     echo "make root path : $procpath"
     if [[ -z $( lsblk -o path | grep $procpath ) ]];then
         echo "create proc partition"
-        #parted -s $drivpath mkpart logical ext4 0% 25GiB
-        echo -e "n\np\n\n+25G\nw" | fdisk $drivpath
+        parted -s $drivpath mkpart logical ext4 2GB 27GB
     fi
 }
 
@@ -140,8 +139,7 @@ function raptor_disks_prep_swap_make() {
 
     if [[ -z $( lsblk -o path | grep $swappath ) ]];then
         echo "create swap partition"
-        #parted -s $drivpath mkpart primary ext4 27056MiB 31168MiB
-        echo -e "n\np\n\n+4G\nw" | fdisk $drivpath
+        parted -s $drivpath mkpart primary swap 27G 31GB
     fi
 }
 
@@ -165,7 +163,7 @@ function raptor_disks_prep_home_make() {
 
     if [[ -z $( lsblk -o path | grep $procpath ) ]];then
         echo "create proc partition"
-        parted -s $drivpath mkpart primary ext4 0% 100%
+        parted -s $drivpath mkpart primary ext4 31GB 100%
     fi
 }
 
