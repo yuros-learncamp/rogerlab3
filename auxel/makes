@@ -53,7 +53,7 @@ function raptor_disks_prep_swip() {
 ## MAKE PARTITION
 function raptor_disks_prep_make_uefi() {
 
-    if [[ -n $( lsblk -o label | grep "UEFI" ) ]]; then
+    if [[ -z $( lsblk -o label | grep "UEFI" ) ]]; then
         echo "create uefi"
         echo -e "n\np\n\n\n+1G\nt\n\n1\nw" | fdisk "$drivpath" > /dev/null 2>&1
         sleep 2
@@ -64,7 +64,7 @@ function raptor_disks_prep_make_uefi() {
 
 function raptor_disks_prep_make_boot() {
 
-    if [[ -n $( lsblk -o label | grep "BOOT" ) ]]; then
+    if [[ -z $( lsblk -o label | grep "BOOT" ) ]]; then
         echo "create boot"
         echo -e "n\np\n\n\n+1G\nw" | fdisk "$drivpath" > /dev/null 2>&1
         sleep 2
@@ -75,7 +75,7 @@ function raptor_disks_prep_make_boot() {
 
 function raptor_disks_prep_make_root() {
     
-    if [[ -n $( lsblk -o label | grep "ROOT" ) ]]; then
+    if [[ -z $( lsblk -o label | grep "ROOT" ) ]]; then
         echo "create root"
         echo -e "n\np\n\n\n+27G\nw" | fdisk "$drivpath" > /dev/null 2>&1
         sleep 2
@@ -86,7 +86,7 @@ function raptor_disks_prep_make_root() {
 
 function raptor_disks_prep_make_swap() {
     
-    if [[ -n $( lsblk -o label | grep "SWAP" ) ]]; then
+    if [[ -z $( lsblk -o label | grep "SWAP" ) ]]; then
         echo "create swap"
         echo -e "n\np\n\n\n+4G\nw" | fdisk "$drivpath" > /dev/null 2>&1
         sleep 2
@@ -97,7 +97,7 @@ function raptor_disks_prep_make_swap() {
 
 function raptor_disks_prep_make_home() {
     
-    if [[ -n $( lsblk -o label | grep "HOME" ) ]]; then
+    if [[ -z $( lsblk -o label | grep "HOME" ) ]]; then
         echo "create home"
         echo -e "n\np\n\n\n\nw"    | fdisk "$drivpath" > /dev/null 2>&1
         sleep 2
