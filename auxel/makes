@@ -203,9 +203,10 @@ function raptor_disks_prep() {
 
     clear && echo "Partition configuration"
     #raptor_disks_init &&
-    #raptor_disks_make &&
+    raptor_disks_make &&
     #raptor_disks_form &&
     #raptor_disks_mont
+    echo "configration done"
 }
 
 function raptor_cores_prep_mulibs() {
@@ -347,7 +348,7 @@ function raptor_boots_post_init() {
     echo "kernel parameter boot configuration"
     echo "root=$rootpath" > /mnt/etc/cmdline.d/01-boot.conf && 
     echo "installation systemd boot"
-    arch-chroot /mnt bootctl --path=/boot install
+    bootctl --path=/mnt/boot install
 }
 
 function raptor_boots_post() {
