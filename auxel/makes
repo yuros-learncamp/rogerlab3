@@ -41,34 +41,24 @@ function raptor_disks_prep_make() {
         echo "create efi partition"
         
         echo "create efis"
-        #sector_efis=$( parted -s "$drivpath" unit s print free | grep "Free Space" | head -n 2 | sed -n '2p' | awk '{print $1}'  )
-        #parted -s --align=optimal "$drivpath" mkpart primary fat32 $sector_efis "+1GB"
-        #parted -s $drivpath set 1 esp on 
-        #parted -s $drivpath set 1 boot on
-        echo -e "n\np\n\n\n+1G\nt\n\n1\nw" | fdisk "$drivpath"
+        echo -e "n\np\n\n\n+1G\nt\n\n1\nw" | fdisk "$drivpath" > /dev/null 2>&1
         sleep 2
 
         echo "create boot"
-        #sector_boot=$( parted -s "$drivpath" unit s print free | grep "Free Space" | head -n 2 | sed -n '2p' | awk '{print $1}' )
-        #parted -s $drivpath mkpart primary ext4 $sector_boot "+2GB"
-        echo -e "n\np\n\n\n+1G\nw" | fdisk "$drivpath"
+        echo -e "n\np\n\n\n+1G\nw" | fdisk "$drivpath" > /dev/null 2>&1
         sleep 2
 
         echo "create root"
-        sector_root=$( parted -s "$drivpath" unit s print free | grep "Free Space" | head -n 2 | sed -n '2p' | awk '{print $1}'  )
-        #parted -s $drivpath mkpart primary ext4 $sector_root +27GB
-        echo -e "n\np\n\n\n+27G\nw" | fdisk "$drivpath"
+        echo -e "n\np\n\n\n+27G\nw" | fdisk "$drivpath" > /dev/null 2>&1
         sleep 2
 
         echo "create swap"
-        sector_swap=$( parted -s "$drivpath" unit s print free | grep "Free Space" | head -n 2 | sed -n '2p' | awk '{print $1}'  )
-        #parted -s $drivpath mkpart primary linux-swap $sector_swap +31GB
-        echo -e "n\np\n\n\n+4G\nw" | fdisk "$drivpath"
+        echo -e "n\np\n\n\n+4G\nw" | fdisk "$drivpath" > /dev/null 2>&1
         sleep 2
 
         echo "create home"
         sector_home=$( parted -s "$drivpath" unit s print free | grep "Free Space" | head -n 2 | sed -n '2p' | awk '{print $1}' )
-        parted -s $drivpath mkpart primary ext4 $sector_home 100%
+        parted -s $drivpath mkpart primary ext4 $sector_home 100% > /dev/null 2>&1
         sleep 2
     fi
 }
