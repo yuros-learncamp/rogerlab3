@@ -347,11 +347,11 @@ function raptor_boots_post_prep() {
         mv /mnt/boot/intel-ucode.img /mnt/boot/kernel/ 
     fi
 
-    if [[ -e /mnt/boot/vmlinuz* ]]; then
+    if [[ -e /mnt/boot/vmlinuz-linux-zen ]]; then
         echo "clean vmlinuz"
-        mv /mnt/boot/vmlinuz*  /mnt/boot/kernel/ 
+        mv /mnt/boot/vmlinuz-linux-zen  /mnt/boot/kernel/ 
     fi
-    
+
     echo "clean initramfs"
     test -e /mnt/boot/initramfs*  && rm -f /mnt/boot/initramfs*
 }
