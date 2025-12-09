@@ -2,7 +2,8 @@
 
 ## PREP PARTITION
 function raptor_disks_prep_pure_mont() {
-    umount -R /mnt > /dev/null 2>&1
+    local ismounted=$( lsblk -o lsblk -o path,mountpoint | grep "/mnt" )
+    test -n $ismounted && umount -R /mnt > /dev/null 2>&1
 }
 
 function raptor_disks_prep_pure() {
@@ -95,7 +96,7 @@ function raptor_disks_prep_make_swap() {
         sleep 1
     else
         echo "prepare swap"
-        swappath=$(lsblk -o path,swap | awk '{print $1}')
+        swappath=$(lsblk -o path,fstype | grep swap | awk '{print $1}')
     fi
 }
 
@@ -199,7 +200,7 @@ function raptor_disks_prep_mont() {
 
 function raptor_disks_prep() {
 
-    sleep 2 && clear
+    clear
     echo "Partition installation"
     #raptor_disks_prep_pure &&
     #raptor_disks_prep_dual &&
