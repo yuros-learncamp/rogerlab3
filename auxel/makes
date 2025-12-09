@@ -42,6 +42,7 @@ function raptor_disks_prep_make() {
 
         partnumber=$(parted /dev/sda print | awk '{print $1}' | tail -n 2 | tr -d '[:space:]')
         test -z $partnumber && partnumber=1
+        
         echo "create efis"
         #sector_efis=$( parted -s "$drivpath" unit s print free | grep "Free Space" | head -n 2 | sed -n '2p' | awk '{print $1}'  )
         #parted -s --align=optimal "$drivpath" mkpart primary fat32 $sector_efis "+1GB"
