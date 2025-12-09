@@ -335,7 +335,9 @@ function raptor_cores_post_user() {
     echo "grant administrator role"
     arch-chroot /mnt usermod -aG wheel $username &&
     echo "create user password"
-    arch-chroot /mnt echo "$username:$password" | chpasswd
+    export makepass=$username
+    export makeuser=$password
+    arch-chroot /mnt echo $makeuser:$makepass | chpasswd
 }
 
 function raptor_cores_post_srvc() {
@@ -349,6 +351,9 @@ function raptor_cores_post() {
     raptor_cores_post_time
     raptor_cores_post_user
     raptor_cores_post_srvc
+
+    echo "Base module configured"
+
 }
 
 function raptor_kerns_post() {
