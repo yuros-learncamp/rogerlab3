@@ -40,7 +40,7 @@ function raptor_disks_prep_efis_make() {
     echo "make efi path : $efispath"
     if [[ -z  $( lsblk -o path | grep $efispath )  ]];then
         echo "create efi partition"
-        parted -s --align=optimal "$drivpath" mkpart "EFI System Partition" fat32 1MiB 1GB
+        parted -s --align=optimal "$drivpath" fat32 1MiB 1GB
         parted -s $drivpath set 1 esp on 
         parted -s $drivpath set 1 boot on
     fi
@@ -80,7 +80,7 @@ function raptor_disks_prep_boot_make() {
 
 function raptor_disks_prep_boot_mono() {
     echo "set boot for linux only partition"
-    raptor_disks_prep_boot_make &&
+    raptor_disks_prep_boot_make
     raptor_disks_prep_boot_form
 }
 
