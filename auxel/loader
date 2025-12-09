@@ -53,6 +53,6 @@ read -p "Do you want continue ? [Y/n]" runinstallscript
 if [[ $runinstallscript == "Y" ]]||[[ $runinstallscript == "y" ]];then
     echo "start installation"
 else
-    echo "cancen installation"
-    exit 0
+    vim "$buildprof/$3" &&
+    source "$buildprof/$3"
 fi
