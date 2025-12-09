@@ -31,7 +31,7 @@ function raptor_disks_init_dual() {
 
 function raptor_disks_init_swip() {
 
-    if [[ -z $( lsblk -o label | grep "UEFI" ) ]]&&[[ $dualboot == false ]];then
+    if [[ $dualboot == false ]];then
 
         read -p "Do yout want swipe partition table : [y/N] " swipe_partition_table
 
@@ -46,7 +46,6 @@ function raptor_disks_init() {
     raptor_disks_init_dual
     raptor_disks_init_swip
 }
-
 
 ## MAKE PARTITION
 function raptor_disks_make_uefi() {
