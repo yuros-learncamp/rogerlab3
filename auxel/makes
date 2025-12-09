@@ -258,7 +258,7 @@ function raptor_cores_prep() {
     craine_cores_post_config
 }
 
-function raptor_kerns_prep_install() {
+function raptor_kerns_prep_make() {
     arch-chroot /mnt curl -s 'https://liquorix.net/install-liquorix.sh' | sudo bash
 }
 
@@ -266,7 +266,7 @@ function raptor_kerns_prep() {
     
     sleep 2 && clear
     echo "Kernel module installation"
-    raptor_kerns_prep_install
+    raptor_kerns_prep_make
 }
 
 
