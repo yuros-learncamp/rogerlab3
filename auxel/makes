@@ -324,6 +324,7 @@ function raptor_boots_post() {
     echo "Booting module configuration"
     raptor_boots_post_prep
     raptor_boots_post_init
+    exit
 }
 
 
