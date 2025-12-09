@@ -220,12 +220,8 @@ function raptor_disks_prep() {
     clear && echo "Partition configuration"
     raptor_disks_init &&
     raptor_disks_make &&
-    echo $rootpath
-    echo $bootpath
-
-    exit
-    #raptor_disks_form &&
-    #raptor_disks_mont
+    raptor_disks_form &&
+    raptor_disks_mont &&
     echo "configration done"
 }
 
