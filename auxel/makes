@@ -7,7 +7,6 @@ function raptor_disks_prep_pure_mont() {
 
 function raptor_disks_prep_pure() {
     raptor_disks_prep_pure_mont
-    raptor_disks_prep_pure_swap
 }
 
 ## dualboot validator team # @Al Muhdil Karim <karim@yuros.org> @Fawaz Rifqi Frasetia <fras@yuros.org>
