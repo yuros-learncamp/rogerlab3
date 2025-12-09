@@ -45,7 +45,7 @@ function raptor_disks_prep_make() {
         #parted -s --align=optimal "$drivpath" mkpart primary fat32 $sector_efis "+1GB"
         #parted -s $drivpath set 1 esp on 
         #parted -s $drivpath set 1 boot on
-        echo -e "n\np\n1\n\n+1G\nt\n1\n1\nw" | fdisk "$drivpath"
+        echo -e "n\np\n\n\n+1G\nt\n\n1\nw" | fdisk "$drivpath"
         sleep 2
 
         echo "create boot"
