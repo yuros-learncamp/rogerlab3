@@ -56,13 +56,7 @@ function raptor_disks_make_uefi() {
         sleep 2
         uefipath=$(lsblk -o path | tail -n 1)
         sleep 1
-    elif [[ -z $( lsblk -o label | grep "UEFI" ) ]]&&[[ $dualboot == false ]]; then
-        echo "create uefi"
-        echo -e "n\np\n\n\n+2G\nt\n\n1\nw" | fdisk "$drivpath" > /dev/null 2>&1
-        sleep 2
-        uefipath=$(lsblk -o path | tail -n 1)
-        sleep 1
-    else
+    elif [[ $dualboot == true ]]; then
         echo "prepare uefi"
         uefipath=$(lsblk -o path,label | grep "UEFI" | awk '{print $1}')
     fi
@@ -76,7 +70,13 @@ function raptor_disks_make_boot() {
         sleep 2
         bootpath=$(lsblk -o path | tail -n 1)
         sleep 1
-    elif [[ $dualboot == true ]];then
+    elif [[ -z $( lsblk -o label | grep "BOOT" ) ]]&&[[ $dualboot == false ]]; then
+        echo "create boot"
+        echo -e "n\np\n\n\n+2G\nt\n\n1\nw" | fdisk "$drivpath" > /dev/null 2>&1
+        sleep 2
+        bootpath=$(lsblk -o path | tail -n 1)
+        sleep 1
+    else
         echo "prepare boot"
         bootpath=$(lsblk -o path,label | grep "BOOT" | awk '{print $1}')
     fi
@@ -135,8 +135,10 @@ function raptor_disks_make() {
 
 ## FORM PARTITION
 function raptor_disks_form_uefi() {
-    echo "format uefi partition"
-    mkfs.vfat -F32 -S 4096 -n "UEFI" "$uefipath"
+    if [[ $dualboot == true ]];then
+        echo "format uefi partition"
+        mkfs.vfat -F32 -S 4096 -n "UEFI" "$uefipath"
+    fi
 }
 
 function raptor_disks_form_boot() {
@@ -180,19 +182,19 @@ function raptor_disks_mont_boot() {
         echo "mount boot partition"
         mount $bootpath /mnt/boot &&
         mkdir -p /mnt/boot/{efi,kernel,loader}
+    else
+        mount -o uid=0,gid=0,dmask=007,fmask=007 $bootpath /mnt/boot
+        mkdir -p /mnt/boot/{efi,kernel,loader}
+        mkdir -p /mnt/boot/efi/{boot,linux,systemd}
     fi
 }
 
 function raptor_disks_mont_uefi() {
-    echo "mount uefi partition"
-    if [[ $dualboot == false ]];then
-        mount -o uid=0,gid=0,dmask=007,fmask=007 $uefipath /mnt/boot
-        mkdir -p /mnt/boot/{efi,kernel,loader}
-    else
+    if [[ $dualboot == true ]];then
+        echo "mount uefi partition"
         mount -o uid=0,gid=0,dmask=007,fmask=007 $uefipath /mnt/boot/efi
+        mkdir -p /mnt/boot/efi/{boot,linux,systemd}
     fi
-    mkdir -p /mnt/boot/efi/{boot,linux,systemd}
-     
 }
 
 function raptor_disks_mont_swap() {
@@ -218,8 +220,12 @@ function raptor_disks_prep() {
     clear && echo "Partition configuration"
     raptor_disks_init &&
     raptor_disks_make &&
-    raptor_disks_form &&
-    raptor_disks_mont
+    echo $rootpath
+    echo $bootpath
+
+    exit
+    #raptor_disks_form &&
+    #raptor_disks_mont
     echo "configration done"
 }
 
