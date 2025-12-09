@@ -43,9 +43,8 @@ function raptor_disks_prep_make() {
         parted -s $drivpath set 1 esp on 
         parted -s $drivpath set 1 boot on
         parted -s $drivpath mkpart primary ext4 1GB 2GB
-        parted -s $drivpath mkpart logical ext4 2GB 27GB
-        parted -s $drivpath mkpart primary ext4 27G 31GB
-        parted -s $drivpath mkpart primary linux-swap 27G 31GB
+        parted -s $drivpath mkpart primary ext4 2GB 27GB
+        parted -s $drivpath mkpart primary inux-swap 27G 31GB
         parted -s $drivpath mkpart primary ext4 31GB 100%
     fi
 }
