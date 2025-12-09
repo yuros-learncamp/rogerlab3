@@ -36,7 +36,7 @@ function raptor_disks_prep_swip() {
 
 ## MAKE PARTITION
 function raptor_disks_prep_make_uefi() {
-    echo "create efis"
+    echo "create uefi"
     echo -e "n\np\n\n\n+1G\nt\n\n1\nw" | fdisk "$drivpath" > /dev/null 2>&1
     sleep 2
     uefipath=$(lsblk -o path | tail -n 1)
@@ -123,7 +123,42 @@ function raptor_disks_prep_form() {
     raptor_disks_prep_form_home
 }
 
+## MONT PARTITION
+function raptor_disks_prep_mont_uefi() {
+    echo "mount uefi partition"
+    mount $uefipath /mnt/boot/efi
+}
 
+function raptor_disks_prep_mont_boot() {
+    echo "mount boot partition"
+    mount -o uid=0,gid=0,dmask=007,fmask=007 $bootpath /mnt/boot/
+    mkdir -p /mnt/boot/{efi,kernel,loader}
+    mkdir -p /mnt/boot/efi/{boot,linux,systemd}
+}
+
+function raptor_disks_prep_mont_root() {
+    echo "mount root partition"
+    mount $rootpath /mnt
+    mkdir -p /mnt/{home,boot}
+}
+
+function raptor_disks_prep_mont_swap() {
+    echo "mount swap partition"
+    swapon $swappath
+}
+
+function raptor_disks_prep_mont_home() {
+    echo "mount home partition"
+    mount $homepath /mnt/home
+}
+
+function raptor_disks_prep_mont() {
+    raptor_disks_prep_mont_root
+    raptor_disks_prep_mont_boot
+    raptor_disks_prep_mont_uefi
+    raptor_disks_prep_mont_home
+    raptor_disks_prep_mont_swap
+}
 
 function raptor_disks_prep_efis_make() {
 
@@ -292,6 +327,7 @@ function raptor_disks_prep() {
     raptor_disks_prep_swip &&
     raptor_disks_prep_make &&
     raptor_disks_prep_form &&
+    raptor_disks_prep_mont
     exit
 }
 
