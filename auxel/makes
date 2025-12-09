@@ -259,9 +259,7 @@ function raptor_cores_prep() {
 }
 
 function raptor_kerns_prep_make() {
-    curl -s 'https://liquorix.net/install-liquorix.sh' &&
-    cp install-liquorix.sh /mnt &&
-    arch-chroot /mnt /bin/bash /install-liquorix.sh
+    arch-chroot /mnt /bin/bash -c "curl -s 'https://liquorix.net/install-liquorix.sh' | bash"
 }
 
 function raptor_kerns_prep() {
