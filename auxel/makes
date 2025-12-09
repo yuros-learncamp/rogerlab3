@@ -1,5 +1,19 @@
 #!/bin/bash
 
+## PREP PARTITION
+function raptor_disks_prepa_pure_mont() {
+    umount -R /mnt > /dev/null 2>&1
+}
+
+function raptor_disks_prep_pure_swap() {
+    swapoff $(lsblk -o path,label | grep "SWAP" | awk '{print $1}')
+}
+
+function raptor_disks_prep_pure() {
+    raptor_disks_prepa_pure_mont
+    raptor_disks_prep_pure
+}
+
 ## dualboot validator team # @Al Muhdil Karim <karim@yuros.org> @Fawaz Rifqi Frasetia <fras@yuros.org>
 function raptor_disks_prep_dual() {
 
@@ -188,7 +202,7 @@ function raptor_disks_prep() {
 
     sleep 2 && clear
     echo "Partition installation"
-    
+    raptor_disks_prep_pure &&
     raptor_disks_prep_dual &&
     raptor_disks_prep_swip &&
     raptor_disks_prep_make &&
