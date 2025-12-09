@@ -34,53 +34,97 @@ function raptor_disks_prep_swip() {
 }
 
 
-## AUTO PARTITION
-function raptor_disks_prep_auto_uefi() {
+## MAKE PARTITION
+function raptor_disks_prep_make_uefi() {
     echo "create efis"
     echo -e "n\np\n\n\n+1G\nt\n\n1\nw" | fdisk "$drivpath" > /dev/null 2>&1
     sleep 2
+    uefipath=$(lsblk -o path | tail -n 1)
+    sleep 1
 }
 
-function raptor_disks_prep_auto_boot() {
+function raptor_disks_prep_make_boot() {
     echo "create boot"
     echo -e "n\np\n\n\n+1G\nw" | fdisk "$drivpath" > /dev/null 2>&1
     sleep 2
+    bootpath=$(lsblk -o path | tail -n 1)
+    sleep 1
 }
 
-function raptor_disks_prep_auto_root() {
+function raptor_disks_prep_make_root() {
     echo "create root"
     echo -e "n\np\n\n\n+27G\nw" | fdisk "$drivpath" > /dev/null 2>&1
     sleep 2
+    rootpath=$(lsblk -o path | tail -n 1)
+    sleep 1
 }
 
-function raptor_disks_prep_auto_swap() {
+function raptor_disks_prep_make_swap() {
     echo "create swap"
     echo -e "n\np\n\n\n+4G\nw" | fdisk "$drivpath" > /dev/null 2>&1
     sleep 2
+    swappath=$(lsblk -o path | tail -n 1)
+    sleep 1
 }
 
-function raptor_disks_prep_auto_home() {
+function raptor_disks_prep_make_home() {
     echo "create home"
     echo -e "n\np\n\n\n\nw"    | fdisk "$drivpath" > /dev/null 2>&1
     sleep 2
+    homepath=$(lsblk -o path | tail -n 1)
+    sleep 1
 }
 
-function raptor_disks_prep_auto() {
+function raptor_disks_prep_make() {
     
     if [[ -z $( lsblk -o path | grep $efispath ) ]]; then
         echo "starting auto partitioning"
-        raptor_disks_prep_auto_uefi &&
-        raptor_disks_prep_auto_boot &&
-        raptor_disks_prep_auto_root &&
-        raptor_disks_prep_auto_swap &&
-        raptor_disks_prep_auto_home &&
+        raptor_disks_prep_make_uefi &&
+        raptor_disks_prep_make_boot &&
+        raptor_disks_prep_make_root &&
+        raptor_disks_prep_make_swap &&
+        raptor_disks_prep_make_home &&
         partition_isready=true
     fi
 }
 
 
+## FORM PARTITION
 
-## EFI PARTITION
+function raptor_disks_prep_form_uefi() {
+    echo "format uefi partition"
+    mkfs.vfat -F32 $uefipath
+}
+
+function raptor_disks_prep_form_boot() {
+    echo "format boot partition"
+    mkfs.ext4 $bootpath
+}
+
+function raptor_disks_prep_form_root() {
+    echo "format root partition"
+    mkfs.ext4 $rootpath
+}
+
+function raptor_disks_prep_form_swap() {
+    echo "format swap partition"
+    mkswap $swappath
+}
+
+function raptor_disks_prep_form_home() {
+    echo "format home partition"
+    mkfs.ext4 $homepath
+}
+
+function raptor_disks_prep_form() {
+    raptor_disks_prep_form_uefi
+    raptor_disks_prep_form_boot
+    raptor_disks_prep_form_root
+    raptor_disks_prep_form_swap
+    raptor_disks_prep_form_home
+}
+
+
 function raptor_disks_prep_efis_make() {
 
     echo "make efi path : $efispath"
@@ -228,7 +272,7 @@ function raptor_disks_prep_home() {
 
 
 function raptor_disks_prep_conf() {
-    
+
     if [[ -z $partition_isready ]]; then
         raptor_disks_prep_efis &&
         raptor_disks_prep_boot && 
@@ -246,8 +290,8 @@ function raptor_disks_prep() {
     
     raptor_disks_prep_dual &&
     raptor_disks_prep_swip &&
-    raptor_disks_prep_auto &&
-    raptor_disks_prep_conf &&
+    raptor_disks_prep_make &&
+    raptor_disks_prep_form &&
     exit
 }
 
