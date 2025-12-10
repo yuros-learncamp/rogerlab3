@@ -258,11 +258,6 @@ function raptor_cores_prep() {
     craine_cores_post_config
 }
 
-function raptor_kerns_prep() {
-    sleep 2 && clear
-    echo "Kernel module installation"
-}
-
 function raptor_boots_prep() {
     sleep 2 && clear
     echo "Booting module installation"
@@ -350,11 +345,6 @@ function raptor_cores_post() {
 
     echo "Base module configured"
 
-}
-
-function raptor_kerns_post() {
-    sleep 2 && clear
-    echo "Kernel module configuration"
 }
 
 function raptor_boots_post_prep() {
