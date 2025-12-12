@@ -14,6 +14,10 @@ pipewire-jack
 pipewire-alsa
 lightdm
 xorg-server
+secrets
+libsecret
+eolie
+gnome-keyring
 lightdm-deepin-greeter
 deepin
 deepin-kwin
