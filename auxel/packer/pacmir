@@ -16,7 +16,7 @@ lightdm
 xorg-server
 secrets
 libsecret
-eolie
+firefox
 gnome-keyring
 lightdm-deepin-greeter
 deepin
